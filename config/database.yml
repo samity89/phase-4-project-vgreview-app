@@ -81,6 +81,4 @@ test:
 #
 production:
   <<: *default
-  database: vgreview_app_production
-  username: vgreview_app
-  password: <%= ENV["VGREVIEW_APP_DATABASE_PASSWORD"] %>
+  url: <%= ENV['DATABASE_URL'] %>
