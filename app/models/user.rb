@@ -1,7 +1,7 @@
 class User < ApplicationRecord
     has_secure_password
     has_many :reviews, dependent: :destroy
-    has_many :videogames, through: reviews
+    has_many :videogames, through: :reviews
     
     def password=(new_password)
         salt = BCrypt::Engine::generate_salt
