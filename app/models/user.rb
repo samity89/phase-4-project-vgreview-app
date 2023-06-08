@@ -2,9 +2,9 @@ class User < ApplicationRecord
     has_secure_password
     has_many :reviews, dependent: :destroy
     has_many :videogames, through: :reviews
-    # validates :username, presence: true, uniqueness: true
-    # validates :password, presence: true
-    # validates :age, presence: true
+    validates :username, presence: true, uniqueness: true
+    validates :password, presence: true
+    validates :age, presence: true
     
     def password=(new_password)
         salt = BCrypt::Engine::generate_salt
