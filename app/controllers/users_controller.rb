@@ -1,18 +1,27 @@
 class UsersController < ApplicationController
 
-    def create
-        user = User.create(user_params)
-        render json: user, status: 201
-    end
-
     def index
         users = User.all
         render json: users, include: :reviews, status: 200
     end
+    
+    def create
+        user = User.create(user_params)
+        if user.valid?
+            session[:user_id] = user.id
+            render json: user, status: :created
+        else
+            render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
+        end
+    end
 
     def show
-        user = find_user
-        render json: user, status: 200
+        user = User.find_by(id: session[:user_id])
+        if user 
+            render json: user, status: 200
+        else
+            render json: {error: "Not authorized"}, status: :unauthorized
+        end
     end
 
     def update
