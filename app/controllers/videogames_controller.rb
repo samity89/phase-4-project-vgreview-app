@@ -1,12 +1,12 @@
 class VideogamesController < ApplicationController
     def index
         videogames = Videogame.all
-        render json: videogames, status: 200
+        render json: videogames, include: [:reviews, :users], status: 200
     end
 
     def show
         videogame = find_videogame
-        render json: videogame, status: 200
+        render json: videogame, include: :reviews, status: 200
     end
 
     def create

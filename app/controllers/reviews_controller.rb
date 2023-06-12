@@ -2,7 +2,10 @@ class ReviewsController < ApplicationController
     
     def index
         reviews = Review.all
-        render json: reviews, status: 200
+        render json: reviews, include: 
+            [:videogame => {:only =>[:id, :name, :image_url, :platform, :release_date]}, 
+            :user => {:only =>[:id, :username]}], 
+            status: 200
     end
 
     def show
