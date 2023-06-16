@@ -33,7 +33,7 @@ class UsersController < ApplicationController
     def destroy
         user = find_user
         user.destroy
-        head :no_content
+        render json: {}
     end
 
     private

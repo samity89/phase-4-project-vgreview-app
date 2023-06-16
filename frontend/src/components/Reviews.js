@@ -7,7 +7,7 @@ function Reviews ({reviews, setReviews}) {
     
     const DropDown = () => (
         <select onChange={handleChange}>
-          <option selected disabled>sorting method..</option>
+          <option default disabled>sorting method..</option>
           <option value="gametitle">Game Title</option>
           <option value="lowtohigh">Rating: Low to High</option>
           <option value="hightolow">Rating: High to Low</option>
@@ -19,6 +19,13 @@ function Reviews ({reviews, setReviews}) {
         setSortReviews(event.target.value);
     };
 
+    function handleDeleteClick(id) {
+        fetch(`reviews/${id}#destroy`, 
+            {method: "DELETE"
+            })
+            .then((r) => r.json()).then(deleteById(id))
+    };
+
     const sortedReviews = reviews.sort((a,b) => {
         if (sortReviews === "lowtohigh") {
             return a.rating - b.rating
@@ -28,36 +35,29 @@ function Reviews ({reviews, setReviews}) {
             return a.user.username.localeCompare(b.user.username)
         } else if (sortReviews === "gametitle") {
             return a.videogame.name.localeCompare(b.videogame.name)   
-        }
+        } else {return null}
     })
 
-    
 
-        // if (sortReviews === "lowtohigh") {
-        //     reviews.sort((a,b) => a.rating - b.rating)
-        // } else if (sortReviews ==="hightolow") {
-        //     reviews.sort((a,b) => b.rating - a.rating)
-        // } else if (sortReviews ==="user") {
-        //     reviews.sort((a,b) => a.user.username.localeCompare(b.user.username))
-        // } else if (sortReviews ==="gametitle") {
-        //     reviews.sort((a,b) => a.videogame.name.localeCompare(b.videogame.name))
-        // }
-        // setReviews((reviews) => reviews)}
-
-
+    const deleteById = id => {
+        setReviews(oldReviews => {
+          return oldReviews.filter(review => review.id !== id)
+        })
+      }
     
     
     
     const RenderReviews = () => {
-          return (    
-            sortedReviews.map((review) => (
+            return (    
+            reviews.map((review) => (
                 <div>
                     <h2>{review.videogame.name}</h2>
                     <img src={review.videogame.image_url} alt={review.videogame.name}/>
-                    <h3>reviewed by: {review.user.username}</h3>
                     <h2>{review.title}</h2>
                     <h2>Rating: {review.rating}/10</h2>
+                    <h3>reviewed by: {review.user.username}</h3>
                     <p>{review.body}</p>
+                    <button onClick={ () => handleDeleteClick(review.id)}>delete review</button>
                 </div>
             ))
         )}
