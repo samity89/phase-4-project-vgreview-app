@@ -1,31 +1,29 @@
 
-import {React, useState} from "react";
+import {React, useState, useEffect, useRef} from "react";
 
 function Reviews ({reviews, setReviews}) {
 
     const [sortReviews, setSortReviews] = useState("");
     
-    const DropDown = () => (
-        <select onChange={handleChange}>
-          <option default disabled>sorting method..</option>
-          <option value="gametitle">Game Title</option>
-          <option value="lowtohigh">Rating: Low to High</option>
-          <option value="hightolow">Rating: High to Low</option>
-          <option value="user">User</option>
-        </select>
-    );
-    
-    function handleChange (event) {
-        setSortReviews(event.target.value);
-    };
-
     function handleDeleteClick(id) {
         fetch(`reviews/${id}#destroy`, 
             {method: "DELETE"
             })
-            .then((r) => r.json()).then(deleteById(id))
+            .then((r) => r.json()).then(handleDeleteReview(id))
     };
 
+    
+    const DropDown = () => (
+        <select onChange={handleChange}>
+          <option default>sorting method..</option>
+          <option value="user">User</option>
+          <option value="gametitle">Game Title</option>
+          <option value="lowtohigh">Rating: Low to High</option>
+          <option value="hightolow">Rating: High to Low</option>
+        </select>
+    );
+    
+    
     const sortedReviews = reviews.sort((a,b) => {
         if (sortReviews === "lowtohigh") {
             return a.rating - b.rating
@@ -37,27 +35,97 @@ function Reviews ({reviews, setReviews}) {
             return a.videogame.name.localeCompare(b.videogame.name)   
         } else {return null}
     })
-
-
-    const deleteById = id => {
+    
+    function handleChange (event) {
+        setSortReviews(event.target.value);
+    };
+    
+    
+    const handleDeleteReview = id => {
         setReviews(oldReviews => {
-          return oldReviews.filter(review => review.id !== id)
+            return oldReviews.filter(review => review.id !== id)
         })
+    }
+    
+    function handleEdit(id, editingValue) {
+        fetch(`reviews/${id}#update`,
+        {method: "PATCH",
+        headers: {"Content-Type": "application/json,"},
+        body: JSON.stringify({
+            body: editingValue
+        })
+        })
+        .then((r) => r.json()).then((r) => handleUpdateReview(r))
+    }
+
+    function handleUpdateReview(updatedReview) {
+        const updatedReviews = reviews.map((review) => {
+          if (review.id === updatedReview.id) {
+            return updatedReview;
+          } else {
+            return review;
+          }
+        });
+        setReviews(updatedReviews);
       }
     
+    const ReviewEdit = ({ value, review }) => {
+        const [editingValue, setEditingValue] = useState(value);
+      
+        function onChange (event) {
+            setEditingValue(event.target.value);
+        };
+      
+        const onKeyDown = (event) => {
+          if (event.key === "Enter" || event.key === "Escape") {
+            event.target.blur();
+          }
+        };
+      
+        const onBlur = () => {
+            handleEdit(review.id, editingValue)
+        };
+      
+        // const onInput = (target) => {
+        //   if (target.scrollHeight > 33) {
+        //     target.style.height = "5px";
+        //     target.style.height = target.scrollHeight - 16 + "px";
+        //   }
+        // };
+      
+        // const textareaRef = useRef();
+      
+        // useEffect(() => {
+        //   onInput(textareaRef.current);
+        // }, [onInput, textareaRef]);
+      
+        return (
+          <textarea
+            rows={1}
+            aria-label="Field name"
+            value={editingValue}
+            onBlur={onBlur}
+            onChange={onChange}
+            onKeyDown={onKeyDown}
+            // onInput={(event) => onInput(event.target)}
+            // ref={textareaRef}
+          />
+        );
+    };
     
     
-    const RenderReviews = () => {
-            return (    
+    const RenderReviews = () => {   
+        return (    
             reviews.map((review) => (
-                <div>
+                <div key={review.id}>
                     <h2>{review.videogame.name}</h2>
                     <img src={review.videogame.image_url} alt={review.videogame.name}/>
                     <h2>{review.title}</h2>
                     <h2>Rating: {review.rating}/10</h2>
                     <h3>reviewed by: {review.user.username}</h3>
-                    <p>{review.body}</p>
+                    <ReviewEdit value={review.body} review={review}/><br></br>
                     <button onClick={ () => handleDeleteClick(review.id)}>delete review</button>
+                    <hr></hr>
                 </div>
             ))
         )}

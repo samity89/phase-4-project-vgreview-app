@@ -15,13 +15,19 @@ class ReviewsController < ApplicationController
 
     def create
         review = Review.create(review_params)
-        render json: review, status: 201
+        render json: review, include: 
+        [:videogame => {:only =>[:id, :name, :image_url, :platform, :release_date]}, 
+        :user => {:only =>[:id, :username]}], 
+        status: 201
     end
 
     def update
         review = find_review
-        review.update(review_params)
-        render json: review, status: 202
+        review.update(body: params[:body])
+        render json: review, include: 
+            [:videogame => {:only =>[:id, :name, :image_url, :platform, :release_date]}, 
+            :user => {:only =>[:id, :username]}], 
+            status: 202
     end
 
     def destroy
