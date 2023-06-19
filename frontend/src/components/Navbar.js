@@ -15,6 +15,7 @@ function NavBar({ user, setUser }) {
   <header>
   <div className="navbar">
     <NavLink exact="true" to="/"> Home </NavLink>
+    <NavLink exact="true" to="/videogames"> Videogames </NavLink>
     <NavLink exact="true" to="/reviews"> Reviews </NavLink>
   </div>
   <div>

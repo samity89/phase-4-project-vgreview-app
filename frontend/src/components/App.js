@@ -2,6 +2,7 @@ import {React, useEffect, useState} from "react";
 import {BrowserRouter, Route, Routes} from "react-router-dom"
 import NavBar from "./Navbar";
 import Home from "./Home";
+import Videogames from "./Videogames";
 import Reviews from "./Reviews";
 import SignUp from "./SignUp";
 import Login from "./Login";
@@ -110,32 +111,26 @@ function App () {
   
   function handleVGNameChange(event) {
     setVideogameForm({...videogameForm, name: event.target.value})
-    console.log(videogameForm)
   }
   
   function handleVGReleaseDateChange (event) {
     setVideogameForm({...videogameForm, release_date: event.target.value})
-    console.log(videogameForm)
   }
   
   function handleVGDeveloperChange(event) {
     setVideogameForm({...videogameForm, developer: event.target.value})
-    console.log(videogameForm)
   }
 
   function handleVGGenreChange(event) {
     setVideogameForm({...videogameForm, genre: event.target.value})
-    console.log(videogameForm)
   }
 
   function handleVGImageURLChange(event) {
     setVideogameForm({...videogameForm, image_url: event.target.value})
-    console.log(videogameForm)
   }
 
   function handleVGPlatformChange(event) {
     setVideogameForm({...videogameForm, platform: event.target.value})
-    console.log(videogameForm)
   }
   
   return (
@@ -165,6 +160,7 @@ function App () {
             handleVGImageURLChange={handleVGImageURLChange}
             handleVGPlatformChange={handleVGPlatformChange}/>
             }/>
+          <Route path="/videogames" element={<Videogames videogames={videogames}/>}/>
           <Route path="/reviews" element={<Reviews 
             reviews={reviews} 
             setReviews={setReviews} 

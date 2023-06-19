@@ -54,3 +54,16 @@ textarea:focus {
   color: #D8DEE9;
 }
 
+.card {
+  border: grey solid 1px;
+  padding: 1rem;
+  width: 15rem;
+  height: 15rem;
+  display: inline-grid;
+  margin: 1rem 1rem;
+  box-shadow: 3px 4px #e0ca4bbe;
+  background-color: rgb(24, 24, 24);
+  vertical-align: top;
+  justify-items: center;
+}
+
