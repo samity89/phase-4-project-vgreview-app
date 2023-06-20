@@ -2,6 +2,7 @@ import {React, useEffect, useState} from "react";
 import {BrowserRouter, Route, Routes} from "react-router-dom"
 import NavBar from "./Navbar";
 import Home from "./Home";
+import Videogame from "./Videogame";
 import Videogames from "./Videogames";
 import Reviews from "./Reviews";
 import SignUp from "./SignUp";
@@ -160,7 +161,13 @@ function App () {
             handleVGImageURLChange={handleVGImageURLChange}
             handleVGPlatformChange={handleVGPlatformChange}/>
             }/>
-          <Route path="/videogames" element={<Videogames videogames={videogames}/>}/>
+          <Route path="/videogames" element={<Videogames 
+            videogames={videogames}
+            setVideogames={setVideogames}/>
+          }/>
+          {/* <Route path="/videogames/:id" element={<Videogame 
+            videogames={videogames}/>
+          }/> */}
           <Route path="/reviews" element={<Reviews 
             reviews={reviews} 
             setReviews={setReviews} 

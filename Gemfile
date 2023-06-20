@@ -35,4 +35,4 @@ gem "shakapacker", "= 6.6"
 
 gem "react-rails", "= 2.7"
 
-gem "active_model_serializers", "~> 0.10.13"
+gem "active_model_serializers"

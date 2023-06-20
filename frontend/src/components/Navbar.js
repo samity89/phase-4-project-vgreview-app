@@ -14,8 +14,8 @@ function NavBar({ user, setUser }) {
   return (
   <header>
   <div className="navbar">
-    <NavLink exact="true" to="/"> Home </NavLink>
-    <NavLink exact="true" to="/videogames"> Videogames </NavLink>
+    <NavLink exact="true" to="/"> Home |</NavLink>
+    <NavLink exact="true" to="/videogames"> Videogames |</NavLink>
     <NavLink exact="true" to="/reviews"> Reviews </NavLink>
   </div>
   <div>
@@ -23,7 +23,7 @@ function NavBar({ user, setUser }) {
           <button onClick={handleLogoutClick}>Logout</button>
         ) : (
           <>
-            <NavLink exact="true" to="/signup"> Signup </NavLink>
+            <NavLink exact="true" to="/signup"> Signup |</NavLink>
             <NavLink exact="true" to="/login"> Login </NavLink>
           </>
         )}

@@ -9,7 +9,7 @@ class UsersController < ApplicationController
         user = User.create(user_params)
         if user.valid?
             session[:user_id] = user.id
-            render json: user, status: 201
+            render json: user, include: :reviews, status: 201
         else
             render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
         end

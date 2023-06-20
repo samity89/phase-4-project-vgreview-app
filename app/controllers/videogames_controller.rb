@@ -1,14 +1,14 @@
 class VideogamesController < ApplicationController
     def index
         videogames = Videogame.all
-        render json: videogames, include: [:reviews, :users], status: 200
+        render json: videogames, status: 200
     end
 
     def show
         videogame = find_videogame
         render json: videogame, include: :reviews, status: 200
     end
-
+    
     def create
         videogame = Videogame.create(videogame_params)
         render json: videogame, status: 201
@@ -23,7 +23,7 @@ class VideogamesController < ApplicationController
     def destroy
         videogame = find_videogame
         videogame.destroy
-        head :no_content
+        render json: {}
     end
 
     private

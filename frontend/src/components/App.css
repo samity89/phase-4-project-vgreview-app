@@ -55,10 +55,10 @@ textarea:focus {
 }
 
 .card {
-  border: grey solid 1px;
+  border: rgb(255, 255, 255) solid 1px;
   padding: 1rem;
-  width: 15rem;
-  height: 15rem;
+  width: 230px;
+  height: 300px;
   display: inline-grid;
   margin: 1rem 1rem;
   box-shadow: 3px 4px #e0ca4bbe;
@@ -67,3 +67,7 @@ textarea:focus {
   justify-items: center;
 }
 
+button {
+  height: fit-content;
+  align-self: flex-end;
+}

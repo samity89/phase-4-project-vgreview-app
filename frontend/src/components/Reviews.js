@@ -40,8 +40,7 @@ function Reviews ({reviews, setReviews}) {
         setSortReviews(event.target.value);
     };
     
-    
-    const handleDeleteReview = id => {
+    function handleDeleteReview (id) {
         setReviews(oldReviews => {
             return oldReviews.filter(review => review.id !== id)
         })

@@ -10,7 +10,7 @@ class ReviewsController < ApplicationController
 
     def show
         review = find_review
-        render json: review, status: 200
+        render json: review, include: :user, status: 200
     end
 
     def create
