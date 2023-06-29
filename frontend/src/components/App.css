@@ -33,9 +33,10 @@ input:hover {
 
 textarea {
   resize: none;
-  overflow: scroll;
-  height: 100px;
-  max-width: 800px;
+  overflow: auto;
+  height: fit-content;
+  min-height: 30px;
+  width: 60%;
   font-size: 14px;
 }
 
