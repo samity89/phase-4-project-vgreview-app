@@ -71,3 +71,8 @@ button {
   height: fit-content;
   align-self: flex-end;
 }
+
+Link {
+  font-weight: bold;
+  font-size: 24px;
+}

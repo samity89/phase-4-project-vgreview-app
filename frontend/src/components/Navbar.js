@@ -28,6 +28,7 @@ function NavBar({ user, setUser }) {
           </>
         )}
       </div>
+  <hr></hr>
   </header>
 )}
 

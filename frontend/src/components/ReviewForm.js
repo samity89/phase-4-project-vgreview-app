@@ -1,19 +1,53 @@
-function ReviewForm ({
-    videogames,
-    handleFormSubmit,
-    handleTitleChange,
-    handleGameChange,
-    handleRatingChange,
-    handleBodyChange,
-    navigate, 
-}) {
+import { UserContext } from "./UserContext"
+import { useContext, useState} from "react"
 
+function ReviewForm ({
+    videogames, 
+    navigate,
+    setReviews,
+    reviews 
+}) {
+    const {user} = useContext(UserContext)
     const renderGameTitles = videogames.map((videogame) => (
         <option key={videogame.name} value={videogame.id}>{videogame.name}</option>
     ))
+    const [formData, setFormData] = useState({
+        title: "",
+        user_id: null,
+        videogame_id: null,
+        rating: "",
+        body: "",
+    });
 
     function handleOnClick() {
         navigate("/reviews")
+    }
+
+    function handleFormSubmit (event) {
+        event.preventDefault()
+        fetch(`reviews/#create`, {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                "title": formData.title,
+                "user_id": user.id,
+                "videogame_id": formData.videogame_id,
+                "rating": formData.rating,
+                "body": formData.body,
+            })
+        })
+        .then((response) => response.json())
+        .then((newReview) => handleAddReview(newReview))
+    }
+
+    function handleAddReview(newReview) {
+        setReviews([...reviews, newReview])
+    }
+
+    const handleChange = e => {
+        const name = e.target.name;
+        const value = e.target.value;
+        setFormData({...formData, [name]: value})
     }
 
     
@@ -69,16 +103,26 @@ function ReviewForm ({
         <div>
             <form onSubmit={handleFormSubmit}>
                 <h3>submit a new review</h3>
-                <select onChange={handleGameChange}>
-                    <option default value="gametitle">Game Title</option>
+                <select onChange={handleChange} name="videogame_id">
+                    <option 
+                    default value="gametitle">
+                    Game Title</option>
                     {renderGameTitles}
                 </select>
-                <select onChange={handleRatingChange}>
-                    <option default value="rating">Rating</option>
+                <select onChange={handleChange} name="rating">
+                    <option 
+                    default value="rating">
+                    Rating</option>
                     {renderRatingOptions}
                 </select><br></br>
-                Review Title<input onChange={handleTitleChange}/><br/>
-                <textarea onChange={handleBodyChange}/><br></br>
+                Review Title
+                <input type="text"
+                    name="title"
+                    onChange={handleChange}/><br/>
+                <textarea 
+                    type="text"
+                    name="body"
+                    onChange={handleChange}/><br></br>
                 <button type="submit" onClick={handleOnClick}>Submit</button>
             </form>
         </div>

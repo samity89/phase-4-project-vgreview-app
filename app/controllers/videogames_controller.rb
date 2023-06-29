@@ -6,7 +6,7 @@ class VideogamesController < ApplicationController
 
     def show
         videogame = find_videogame
-        render json: videogame, include: :reviews, status: 200
+        render json: videogame, status: 200
     end
     
     def create
@@ -34,6 +34,12 @@ class VideogamesController < ApplicationController
 
     def find_videogame
         Videogame.find_by(id: params[:id])
+    end
+
+    def average_rating
+        videogame = find_videogame
+        values = Videogame.group(:reviews).average(:rating)
+        put values[videogame]
     end
     
 end

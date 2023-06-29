@@ -1,9 +1,12 @@
 
-import {React, useState, useEffect, useRef} from "react";
+import {React, useState, useContext} from "react";
+import { Link } from "react-router-dom";
+import { UserContext } from "./UserContext";
 
 function Reviews ({reviews, setReviews}) {
 
     const [sortReviews, setSortReviews] = useState("");
+    const { user } = useContext(UserContext)
     
     function handleDeleteClick(id) {
         fetch(`reviews/${id}#destroy`, 
@@ -66,7 +69,7 @@ function Reviews ({reviews, setReviews}) {
           }
         });
         setReviews(updatedReviews);
-      }
+    }
     
     const ReviewEdit = ({ value, review }) => {
         const [editingValue, setEditingValue] = useState(value);
@@ -85,33 +88,27 @@ function Reviews ({reviews, setReviews}) {
             handleEdit(review.id, editingValue)
         };
       
-        // const onInput = (target) => {
-        //   if (target.scrollHeight > 33) {
-        //     target.style.height = "5px";
-        //     target.style.height = target.scrollHeight - 16 + "px";
-        //   }
-        // };
-      
-        // const textareaRef = useRef();
-      
-        // useEffect(() => {
-        //   onInput(textareaRef.current);
-        // }, [onInput, textareaRef]);
-      
-        return (
-          <textarea
-            rows={1}
-            aria-label="Field name"
-            value={editingValue}
-            onBlur={onBlur}
-            onChange={onChange}
-            onKeyDown={onKeyDown}
-            // onInput={(event) => onInput(event.target)}
-            // ref={textareaRef}
-          />
-        );
+        
+        if (user && user.id === review.user.id) {
+            return (
+          <div>
+            <textarea
+                rows={1}
+                aria-label="Field name"
+                value={editingValue}
+                onBlur={onBlur}
+                onChange={onChange}
+                onKeyDown={onKeyDown}
+            /><br></br>
+            <button 
+                onClick={ () => handleDeleteClick(review.id)}>
+                delete review
+            </button>
+            </div>
+            ); } else {
+            return<p>{review.body}</p>
+          }
     };
-    
     
     const RenderReviews = () => {   
         return (    
@@ -119,11 +116,10 @@ function Reviews ({reviews, setReviews}) {
                 <div key={review.id}>
                     <h2>{review.videogame.name}</h2>
                     <img src={review.videogame.image_url} alt={review.videogame.name}/>
-                    <h2>{review.title}</h2>
+                    <Link to={`${review.id}`}><h2>{review.title}</h2></Link>
                     <h2>Rating: {review.rating}/10</h2>
                     <h3>reviewed by: {review.user.username}</h3>
                     <ReviewEdit value={review.body} review={review}/><br></br>
-                    <button onClick={ () => handleDeleteClick(review.id)}>delete review</button>
                     <hr></hr>
                 </div>
             ))

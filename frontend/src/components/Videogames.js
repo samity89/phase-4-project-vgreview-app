@@ -1,5 +1,9 @@
+import { Link } from "react-router-dom"
+import { UserContext } from "./UserContext"
+import { useContext } from "react"
+
 function Videogames({videogames, setVideogames}) {
-    
+    const {user} = useContext(UserContext)
     function handleDeleteClick(id) {
         fetch(`videogames/${id}#destroy`, 
             {method: "DELETE"
@@ -13,16 +17,20 @@ function Videogames({videogames, setVideogames}) {
         })
     }
 
-    function handleGameNavigate (id) {
-
+    function handleButtonRender (videogame) {
+        if (user && user.username === "samity") {
+            return (
+                <button onClick={()=>handleDeleteClick(videogame.id)}>Delete Videogame and its Reviews</button>
+            )
+        }
     }
-    
+
     const renderVideogames = videogames.map((videogame) => (
         <div className="card" key={videogame.name}>
-            <h3 onClick={handleGameNavigate()}>{videogame.name}</h3>
+            <Link to={`${videogame.id}`}><h3>{videogame.name}</h3></Link>
             <img src={videogame.image_url} alt={videogame.name}/>
-            <button onClick={()=>handleDeleteClick(videogame.id)}>Delete Videogame and its Reviews</button>
-         </div>        
+            {handleButtonRender(videogame)}
+        </div>
     ))
     
     return(
@@ -33,3 +41,6 @@ function Videogames({videogames, setVideogames}) {
 }
 
 export default Videogames
+    
+    
+    

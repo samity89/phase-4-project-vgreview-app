@@ -1,28 +1,17 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import ReviewForm from "./ReviewForm";
 import VGForm from "./VGForm";
+import { UserContext } from "./UserContext";
 
-function Home({
-    user, 
-    setUser, 
-    videogames, 
-    setReviews, 
-    formData,
-    handleFormSubmit,
-    handleTitleChange,
-    handleGameChange,
-    handleRatingChange,
-    handleBodyChange,
-    handleGameFormSubmit,
-    handleVGNameChange,
-    handleVGDeveloperChange,
-    handleVGGenreChange,
-    handleVGReleaseDateChange,
-    handleVGImageURLChange,
-    handleVGPlatformChange, 
+function Home({ 
+    videogames,
+    setVideogames,
+    reviews,
+    setReviews
 }) {
-  
+  const { user, setUser } = useContext(UserContext)
+
   const navigate = useNavigate()
   function handleDeleteUser (id) {
     fetch(`users/${id}#destroy`, {method: "DELETE"}).then((r) => r.json())
@@ -32,31 +21,21 @@ function Home({
   
   
   
-  
   if (user) {
     return (
     <div>
       <h1>Welcome, {user.username}!</h1>
       <ReviewForm 
-        videogames={videogames} 
-        handleFormSubmit={handleFormSubmit}
-        handleTitleChange={handleTitleChange}
-        handleGameChange={handleGameChange}
-        handleRatingChange={handleRatingChange}
-        handleBodyChange={handleBodyChange}
+        videogames={videogames}
+        reviews={reviews}
+        setReviews={setReviews}
         navigate={navigate}
       /><hr></hr>
       <VGForm
-        handleGameFormSubmit={handleGameFormSubmit}
-        handleVGNameChange={handleVGNameChange}
-        handleVGDeveloperChange={handleVGDeveloperChange}
-        handleVGGenreChange={handleVGGenreChange}
-        handleVGReleaseDateChange={handleVGReleaseDateChange}
-        handleVGImageURLChange={handleVGImageURLChange}
-        handleVGPlatformChange={handleVGPlatformChange}
+        videogames={videogames}
+        setVideogames={setVideogames}
         navigate={navigate}
       />
-      <hr></hr>
         <br></br><br></br>
       <button onClick = {() => handleDeleteUser(user.id)}>delete my account and all of my reviews</button>
     </div>

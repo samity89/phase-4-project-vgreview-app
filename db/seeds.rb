@@ -1,5 +1,5 @@
-User.create!(username: 'samity', password: 'password', age: 34)
-User.create!(username: 'testuser', password: 'password', age: 19)
+User.create!(username: 'samity', password: 'password1')
+User.create!(username: 'testuser', password: 'password1')
 
 Videogame.create!(
     name: 'The Legend of Zelda: Tears of the Kingdom',
