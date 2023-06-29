@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom" 
 
 function SignUp({ setUser }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
+  const navigate = useNavigate()
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -22,6 +24,7 @@ function SignUp({ setUser }) {
         r.json().then((user) => setUser(user));
       }
     });
+    navigate("/")
   }
 
   return (
