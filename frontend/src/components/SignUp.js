@@ -1,7 +1,9 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom" 
+import React, { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom"
+import { UserContext } from "./UserContext"; 
 
-function SignUp({ setUser }) {
+function SignUp() {
+  const {setUser} = useContext(UserContext)
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
