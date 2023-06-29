@@ -35,7 +35,7 @@ textarea {
   resize: none;
   overflow: hidden;
   height: 100px;
-  width: 800px;
+  max-width: 800px;
   font-size: 14px;
 }
 
