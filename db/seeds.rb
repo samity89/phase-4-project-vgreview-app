@@ -1,5 +1,6 @@
 User.create!(username: 'samity', password: 'password1')
-User.create!(username: 'testuser', password: 'password1')
+User.create!(username: 'alpha', password: 'password1')
+User.create!(username: 'zeta', password: 'password1')
 
 Videogame.create!(
     name: 'The Legend of Zelda: Tears of the Kingdom',
