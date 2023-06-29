@@ -18,14 +18,14 @@ function App () {
 
   useEffect(() => {
     fetch("/reviews")
-    .then((response) => response.json())
-    .then((response) => setReviews(response));
+    .then((r) => r.json())
+    .then((r) => setReviews(r));
     fetch("/videogames")
-    .then((response) => response.json())
-    .then((response) => setVideogames(response));
-    fetch("/me").then((response) => {
-      if (response.okay) {
-        response.json().then((user) => setUser(user));
+    .then((r) => r.json())
+    .then((r) => setVideogames(r));
+    fetch("/me").then((r) => {
+      if (r.okay) {
+        r.json().then((user) => setUser(user));
       }
     });
   }, [])     

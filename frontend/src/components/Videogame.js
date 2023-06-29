@@ -28,7 +28,7 @@ function Videogame ({videogames, setVideogames}) {
     
     useEffect(() => {
         fetch(`${location.pathname}`)
-        .then((response) => response.json())
+        .then((r) => r.json())
         .then((r) => {
             setGame(r)
             setEditGameForm({
@@ -69,8 +69,8 @@ function Videogame ({videogames, setVideogames}) {
             }
           )
         })
-        .then((response) => response.json())
-        .then((response) => handleUpdateGame(response))
+        .then((r) => r.json())
+        .then((r) => handleUpdateGame(r))
         setIsEditting(!isEditting)
     }
 
@@ -78,13 +78,11 @@ function Videogame ({videogames, setVideogames}) {
         const updatedVideogames = videogames.map((videogame) => {
     
             if (videogame.id === updatedGame.id) {
-                console.log("updated game returned")
                 return updatedGame;
             } else {
                 return videogame;
             }
         });
-        console.log(updatedVideogames)
         setVideogames(updatedVideogames);
         setGame(updatedGame)
         setEditGameForm({
