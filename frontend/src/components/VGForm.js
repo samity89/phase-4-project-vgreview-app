@@ -15,33 +15,32 @@ function VGForm ({
         image_url: "",
         platform: "",
     })
-    function handleOnClick() {
-        navigate("/videogames")
-    }
+
     const handleChange = e => {
         const name = e.target.name;
         const value = e.target.value;
         setVideogameForm({...videogameForm, [name]: value})
     }
-
+    
     
     function handleGameFormSubmit (event) {
         event.preventDefault()
         fetch(`videogames/#create`, {
-          method: "POST",
-          headers: {"Content-Type": "application/json"},
-          body: JSON.stringify(
-            {
-              "name": videogameForm.name,
-              "developer": videogameForm.developer,
-              "release_date": videogameForm.release_date,
-              "genre": videogameForm.genre,
-              "image_url": videogameForm.image_url,
-              "platform": videogameForm.platform
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(
+                {
+                    "name": videogameForm.name,
+                    "developer": videogameForm.developer,
+                    "release_date": videogameForm.release_date,
+                    "genre": videogameForm.genre,
+                    "image_url": videogameForm.image_url,
+                    "platform": videogameForm.platform
+                })
             })
-          })
-        .then((response) => response.json())
-        .then((newGame) => handleAddGame(newGame))
+            .then((response) => response.json())
+            .then((newGame) => handleAddGame(newGame))
+            navigate("/videogames")
     }
       
         function handleAddGame(newGame) {
@@ -72,7 +71,7 @@ function VGForm ({
                 Platform<input 
                     name="platform"
                     onChange={handleChange}/><br/>
-                <button type="submit" onClick={handleOnClick}>Submit</button>
+                <button type="submit">Submit</button>
                 <hr></hr>
             </form>
         </div>

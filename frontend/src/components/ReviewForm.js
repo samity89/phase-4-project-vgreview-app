@@ -19,10 +19,6 @@ function ReviewForm ({
         body: "",
     });
 
-    function handleOnClick() {
-        navigate("/reviews")
-    }
-
     function handleFormSubmit (event) {
         event.preventDefault()
         fetch(`reviews/#create`, {
@@ -38,6 +34,7 @@ function ReviewForm ({
         })
         .then((response) => response.json())
         .then((newReview) => handleAddReview(newReview))
+        navigate("/reviews")
     }
 
     function handleAddReview(newReview) {
@@ -123,7 +120,7 @@ function ReviewForm ({
                     type="text"
                     name="body"
                     onChange={handleChange}/><br></br>
-                <button type="submit" onClick={handleOnClick}>Submit</button>
+                <button type="submit">Submit</button>
             </form>
         </div>
     )
