@@ -15,7 +15,7 @@ function Reviews ({reviews, setReviews}) {
             .then((r) => r.json()).then(handleDeleteReview(id))
     };
 
-    
+     
     const DropDown = () => (
         <select onChange={handleChange}>
           <option default>sorting method..</option>

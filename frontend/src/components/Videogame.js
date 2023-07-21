@@ -1,58 +1,41 @@
-import { useEffect, useState, useContext } from "react"
-import { useLocation } from "react-router-dom"
+import { useState, useContext } from "react"
+import { useParams } from "react-router-dom"
 import { UserContext } from "./UserContext"
 
 
 function Videogame ({videogames, setVideogames}) {
-    
-    const location = useLocation()
+    const {id} = useParams()
     const { user } = useContext(UserContext)
-    const [isEditting, setIsEditting] = useState(false)
+    let displayedGame = videogames.filter(videogame => videogame.id === parseInt(id))[0]
     const [game, setGame] = useState({
-        name: "",
-        developer: "",
-        release_date: "",
-        genre: "",
-        image_url: "",
-        platform: "",
-        reviews: []
+        id: displayedGame.id,
+        name: displayedGame.name,
+        developer: displayedGame.developer,
+        release_date: displayedGame.release_date,
+        genre: displayedGame.genre,
+        image_url: displayedGame.image_url,
+        platform: displayedGame.platform,
+        reviews: displayedGame.reviews
     })
     const [editGameForm, setEditGameForm] = useState({
-        name: "",
-        developer: "",
-        release_date: "",
-        genre: "",
-        image_url: "",
-        platform: "",        
+        name: displayedGame.name,
+        developer: displayedGame.developer,
+        release_date: displayedGame.release_date,
+        genre: displayedGame.genre,
+        image_url: displayedGame.image_url,
+        platform: displayedGame.platform,       
     })
     
-    useEffect(() => {
-        fetch(`${location.pathname}`)
-        .then((r) => r.json())
-        .then((r) => {
-            setGame(r)
-            setEditGameForm({
-                name: r.name,
-                developer: r.developer,
-                release_date: r.release_date,
-                genre: r.genre,
-                image_url: r.image_url,
-                platform: r.platform,
-            })
-        })
-    },[location.pathname, setGame, setEditGameForm])
-    
-    function toggleEdit () {
-        setIsEditting(!isEditting)
-    }
-    
+    const [isEditting, setIsEditting] = useState(false)
+    const toggleEdit = () => setIsEditting(!isEditting)
+    const renderEditButton = (user && user.username === "samity") ? <button onClick={toggleEdit}>edit form</button> : null
     const handleChange = e => {
         const name = e.target.name;
         const value = e.target.value;
         setEditGameForm({...editGameForm, [name]: value})
     }
     
-    function handleEditGameFormSubmit (e) {
+    const handleEditGameFormSubmit = (e) => {
         e.preventDefault()
         fetch(`${game.id}#update`, {
           method: "PATCH",
@@ -73,6 +56,7 @@ function Videogame ({videogames, setVideogames}) {
         .then((r) => handleUpdateGame(r))
         setIsEditting(!isEditting)
     }
+    
 
     function handleUpdateGame(updatedGame) {
         const updatedVideogames = videogames.map((videogame) => {
@@ -95,7 +79,6 @@ function Videogame ({videogames, setVideogames}) {
         })
     }
 
-    const renderEditButton = (user && user.username === "samity") ? <button onClick={toggleEdit}>edit form</button> : null
 
     function renderVideogame (game) {
         function editForm () {
@@ -144,6 +127,86 @@ function Videogame ({videogames, setVideogames}) {
             )} else {return null}
         }
         
+    function handleDeleteReview (id) {
+        setGame(game => ({
+            ...game,
+            reviews: game.reviews.filter(review => review.id !== id)
+        }))
+        handleUpdateGame(game)
+    }
+        
+    function handleDeleteReviewClick(id) {
+        fetch(`reviews/${id}#destroy`, 
+            {method: "DELETE"
+            })
+            .then((r) => r.json()).then(handleDeleteReview(id))
+    };
+
+
+    function handleUpdateReview(updatedReview) {
+        const updatedReviews = game.reviews.map((review) => {
+          if (review.id === updatedReview.id) {
+            return updatedReview;
+          } else {
+            return review;
+          }
+        });
+        console.log(updatedReviews)
+        fetch(`${game.id}#update`, {
+            method: "PATCH",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(
+              {
+                "reviews": updatedReviews
+              }
+            )
+          })
+        .then((r) => r.json())
+        .then((r) => console.log(r))
+    };
+
+
+    function handleEditReview(id, editingValue) {
+        let updatedReview = game.reviews.filter(review => review.id === id)
+        updatedReview[0].body = editingValue
+        handleUpdateReview(updatedReview)
+    }
+
+    const ReviewEdit = ({ value, review }) => {
+        const [editingValue, setEditingValue] = useState(value);
+        const onChange = (event) => setEditingValue(event.target.value)
+        const onKeyDown = (event) => {
+          if (event.key === "Enter" || event.key === "Escape") {
+            event.target.blur();
+          }
+        };
+        const onBlur = () => handleEditReview(review.id, editingValue);
+      
+        if (user && user.id === review.user.id) {
+            return (
+          <div>
+            <textarea
+                rows={1}
+                aria-label="Field name"
+                value={editingValue}
+                onBlur={onBlur}
+                onChange={onChange}
+                onKeyDown={onKeyDown}
+            /><br></br>
+            <button 
+                onClick={ () => handleDeleteReviewClick(review.id)}>
+                delete review
+            </button>
+            </div>
+            ); } else {
+            return<p>{review.body}</p>
+          }
+    };
+      
+      
+      
+        
+        
         const renderGameReviews = (reviews) => {
             return (
                 reviews.map((review) => (
@@ -151,7 +214,7 @@ function Videogame ({videogames, setVideogames}) {
                         <h2>{review.title}</h2>
                         <h2>Rating: {review.rating}/10</h2>
                         <h3>Reviewed by: {review.user.username}</h3>
-                        <p>{review.body}</p><br></br>
+                        <ReviewEdit review={review} value={review.body}/>
                         <hr></hr>
                     </div>
                 ))

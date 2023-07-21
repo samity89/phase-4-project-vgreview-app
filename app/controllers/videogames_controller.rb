@@ -1,23 +1,24 @@
 class VideogamesController < ApplicationController
+    skip_before_action :authorize, only: [:index, :show]
     def index
         videogames = Videogame.all
-        render json: videogames, status: 200
+        render json: videogames, include: ['reviews', 'reviews.user'], status: 200
     end
 
     def show
         videogame = find_videogame
-        render json: videogame, status: 200
+        render json: videogame, include: ['reviews', 'reviews.user'], status: 200
     end
     
     def create
         videogame = Videogame.create(videogame_params)
-        render json: videogame, status: 201
+        render json: videogame, include: ['reviews', 'reviews.user' ], status: 201
     end
 
     def update
         videogame = find_videogame
         videogame.update(videogame_params)
-        render json: videogame, status: 202
+        render json: videogame, include: ['reviews', 'reviews.user' ], status: 202
     end
 
     def destroy
@@ -29,17 +30,17 @@ class VideogamesController < ApplicationController
     private
 
     def videogame_params
-        params.permit(:name, :developer, :release_date, :genre, :image_url, :platform)
+        params.permit(:id, :name, :developer, :release_date, :genre, :image_url, :platform, :reviews, :videogame)
     end
 
     def find_videogame
         Videogame.find_by(id: params[:id])
     end
 
-    def average_rating
-        videogame = find_videogame
-        values = Videogame.group(:reviews).average(:rating)
-        put values[videogame]
-    end
+    # def average_rating
+    #     videogame = find_videogame
+    #     values = Videogame.group(:reviews).average(:rating)
+    #     render json: values
+    # end
     
 end

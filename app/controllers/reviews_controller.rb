@@ -1,11 +1,9 @@
 class ReviewsController < ApplicationController
+    skip_before_action :authorize, only: [:index, :show]
     
     def index
         reviews = Review.all
-        render json: reviews, include: 
-            [:videogame => {:only =>[:id, :name, :image_url, :platform, :release_date]}, 
-            :user => {:only =>[:id, :username]}], 
-            status: 200
+        render json: reviews, status: 200
     end
 
     def show
@@ -15,19 +13,13 @@ class ReviewsController < ApplicationController
 
     def create
         review = Review.create(review_params)
-        render json: review, include: 
-        [:videogame => {:only =>[:id, :name, :image_url, :platform, :release_date]}, 
-        :user => {:only =>[:id, :username]}], 
-        status: 201
+        render json: review, status: 201
     end
 
     def update
         review = find_review
-        review.update(body: params[:body])
-        render json: review, include: 
-            [:videogame => {:only =>[:id, :name, :image_url, :platform, :release_date]}, 
-            :user => {:only =>[:id, :username]}], 
-            status: 202
+        review.update(review_params)
+        render json: review, status: 202
     end
 
     def destroy
@@ -43,7 +35,7 @@ class ReviewsController < ApplicationController
     end
 
     def review_params
-        params.permit(:title, :user_id, :videogame_id, :rating, :body)
+        params.permit(:title, :user_id, :videogame_id, :rating, :body, :videogame)
     end
 
 end

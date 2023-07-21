@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-
+    before_action :authorize, only: :destroy
     def index
         users = User.all
         render json: users, include: :reviews, status: 200
@@ -43,6 +43,6 @@ class UsersController < ApplicationController
     end
 
     def user_params
-        params.permit(:username, :password, :age)
+        params.permit(:username, :password, :age, :reviews)
     end
 end
