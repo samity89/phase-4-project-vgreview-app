@@ -28,10 +28,8 @@ function App () {
         r.json().then((user) => setUser(user));
       }
     });
-  }, [])     
-  
+  }, [])
 
-  
   return (
     <div className="App">
       <img src={require('./logo.png')} alt="VGREVIEWS"/>

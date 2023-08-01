@@ -6,7 +6,7 @@ import { UserContext } from "./UserContext"
 function Videogame ({videogames, setVideogames}) {
     const {id} = useParams()
     const { user } = useContext(UserContext)
-    let displayedGame = videogames.filter(videogame => videogame.id === parseInt(id))[0]
+    const displayedGame = videogames.filter(videogame => videogame.id === parseInt(id))[0]
     const [game, setGame] = useState({
         id: displayedGame.id,
         name: displayedGame.name,
@@ -127,37 +127,44 @@ function Videogame ({videogames, setVideogames}) {
             )} else {return null}
         }
         
+        
+        
+    function handleDeleteReviewClick(id) {
+        fetch(`../reviews/${id}#destroy`, 
+        {method: "DELETE"}
+        )
+        .then((r) => r.json()).then(handleDeleteReview(id))
+    };
+        
     function handleDeleteReview (id) {
-        setGame(game => ({
+        setGame((game) => ({
             ...game,
             reviews: game.reviews.filter(review => review.id !== id)
         }))
-        handleUpdateGame(game)
+        console.log(game)
+        handleGameReviewDeletion(game)
     }
         
-    function handleDeleteReviewClick(id) {
-        fetch(`reviews/${id}#destroy`, 
-            {method: "DELETE"
+    function handleGameReviewDeletion (game) {
+        const updatedVideogames = videogames.map((videogame) => {
+            if (videogame.id === game.id) {
+                console.log(game)
+                return game
+            } else {
+                return videogame
+            }
             })
-            .then((r) => r.json()).then(handleDeleteReview(id))
-    };
-
+        setVideogames((videogames) => updatedVideogames)
+        // setCount((count) => count + 1) use callback syntax
+    }
 
     function handleUpdateReview(updatedReview) {
-        const updatedReviews = game.reviews.map((review) => {
-          if (review.id === updatedReview.id) {
-            return updatedReview;
-          } else {
-            return review;
-          }
-        });
-        console.log(updatedReviews)
-        fetch(`${game.id}#update`, {
+        fetch(`../reviews/${updatedReview.id}#update`, {
             method: "PATCH",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(
               {
-                "reviews": updatedReviews
+                "body": updatedReview.body
               }
             )
           })
@@ -169,7 +176,7 @@ function Videogame ({videogames, setVideogames}) {
     function handleEditReview(id, editingValue) {
         let updatedReview = game.reviews.filter(review => review.id === id)
         updatedReview[0].body = editingValue
-        handleUpdateReview(updatedReview)
+        handleUpdateReview(updatedReview[0])
     }
 
     const ReviewEdit = ({ value, review }) => {
@@ -201,12 +208,9 @@ function Videogame ({videogames, setVideogames}) {
             ); } else {
             return<p>{review.body}</p>
           }
-    };
+        };
       
       
-      
-        
-        
         const renderGameReviews = (reviews) => {
             return (
                 reviews.map((review) => (

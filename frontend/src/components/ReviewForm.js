@@ -2,7 +2,8 @@ import { UserContext } from "./UserContext"
 import { useContext, useState} from "react"
 
 function ReviewForm ({
-    videogames, 
+    videogames,
+    setVideogames, 
     navigate,
     setReviews,
     reviews 
@@ -34,11 +35,19 @@ function ReviewForm ({
         })
         .then((response) => response.json())
         .then((newReview) => handleAddReview(newReview))
-        navigate("/reviews")
     }
-
-    function handleAddReview(newReview) {
-        setReviews([...reviews, newReview])
+    
+    const handleAddReview = (newReview) => {
+        const updatedVideogames = videogames.map((videogame) => {
+            if (videogame.id === newReview.videogame_id) {
+                videogame.reviews.push(newReview)
+                return videogame
+            } else {
+                return videogame
+            }
+        })
+        setVideogames(updatedVideogames)
+        navigate(`/videogames/${formData.videogame_id}`)
     }
 
     const handleChange = e => {

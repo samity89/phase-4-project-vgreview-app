@@ -27,6 +27,7 @@ function Home({
       <h1>Welcome, {user.username}!</h1>
       <ReviewForm 
         videogames={videogames}
+        setVideogames={setVideogames}
         reviews={reviews}
         setReviews={setReviews}
         navigate={navigate}

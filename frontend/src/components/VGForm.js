@@ -38,9 +38,13 @@ function VGForm ({
                     "platform": videogameForm.platform
                 })
             })
-            .then((response) => response.json())
-            .then((newGame) => handleAddGame(newGame))
-            navigate("/videogames")
+            .then((response) => {
+                if (response.ok) { 
+                 response.json().then((newGame) => handleAddGame(newGame))
+                 navigate("/videogames")
+                }
+                return Promise.reject(response); 
+            })
     }
       
         function handleAddGame(newGame) {

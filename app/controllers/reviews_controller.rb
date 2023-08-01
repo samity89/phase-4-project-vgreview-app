@@ -8,7 +8,7 @@ class ReviewsController < ApplicationController
 
     def show
         review = find_review
-        render json: review, include: :user, status: 200
+        render json: review, include: ['user'], status: 200
     end
 
     def create
@@ -19,7 +19,7 @@ class ReviewsController < ApplicationController
     def update
         review = find_review
         review.update(review_params)
-        render json: review, status: 202
+        render json: review, include: ['user'], status: 202
     end
 
     def destroy

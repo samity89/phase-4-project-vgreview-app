@@ -30,7 +30,7 @@ class VideogamesController < ApplicationController
     private
 
     def videogame_params
-        params.permit(:id, :name, :developer, :release_date, :genre, :image_url, :platform, :reviews, :videogame)
+        params.permit(:id, :name, :developer, :release_date, :genre, :image_url, :platform, :reviews)
     end
 
     def find_videogame
