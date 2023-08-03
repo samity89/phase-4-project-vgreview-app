@@ -5,21 +5,15 @@ import NavBar from "./Navbar";
 import Home from "./Home";
 import Videogame from "./Videogame";
 import Videogames from "./Videogames";
-import Review from "./Review";
-import Reviews from "./Reviews";
 import SignUp from "./SignUp";
 import Login from "./Login";
 import './App.css';
 
 function App () {
-  const [reviews, setReviews] = useState([])
   const [videogames, setVideogames] = useState([])
   const [user, setUser] = useState(null)
 
   useEffect(() => {
-    fetch("/reviews")
-    .then((r) => r.json())
-    .then((r) => setReviews(r));
     fetch("/videogames")
     .then((r) => r.json())
     .then((r) => setVideogames(r));
@@ -40,9 +34,7 @@ function App () {
             <UserContext.Provider value={{user, setUser}}>
             <Home 
             videogames={videogames}
-            setVideogames={setVideogames}
-            reviews={reviews}
-            setReviews={setReviews}/>
+            setVideogames={setVideogames}/>
             </UserContext.Provider>
           }/>
           <Route path="/videogames" element={
@@ -57,18 +49,6 @@ function App () {
             <Videogame
             videogames={videogames}
             setVideogames={setVideogames}/>
-            </UserContext.Provider>
-          }/>
-          <Route path="/reviews" element={
-            <UserContext.Provider value={{user, setUser}}>
-            <Reviews 
-            reviews={reviews} 
-            setReviews={setReviews}/>
-            </UserContext.Provider>
-          }/>
-          <Route path="/reviews/:id" element={
-            <UserContext.Provider value={{user, setUser}}>
-            <Review/>
             </UserContext.Provider>
           }/>
           <Route path="/signup" element={

@@ -80,7 +80,7 @@ function Videogame ({videogames, setVideogames}) {
     }
 
 
-    function renderVideogame (game) {
+    function renderVideogame () {
         function editForm () {
             if (user && user.username === "samity") {
                 return (
@@ -133,29 +133,28 @@ function Videogame ({videogames, setVideogames}) {
         fetch(`../reviews/${id}#destroy`, 
         {method: "DELETE"}
         )
-        .then((r) => r.json()).then(handleDeleteReview(id))
+        .then((r) => r.json()).then(() => handleDeleteReview(id))
     };
         
     function handleDeleteReview (id) {
         setGame((game) => ({
-            ...game,
+            ...game, 
             reviews: game.reviews.filter(review => review.id !== id)
         }))
-        console.log(game)
-        handleGameReviewDeletion(game)
+        
+        handleGameReviewDeletion(id)
     }
         
-    function handleGameReviewDeletion (game) {
+    function handleGameReviewDeletion (id) {
+        const updatedGame = {...game, reviews: game.reviews.filter(review => review.id !== id)}
         const updatedVideogames = videogames.map((videogame) => {
-            if (videogame.id === game.id) {
-                console.log(game)
-                return game
+            if (videogame.id === updatedGame.id) {
+                return updatedGame
             } else {
                 return videogame
             }
             })
-        setVideogames((videogames) => updatedVideogames)
-        // setCount((count) => count + 1) use callback syntax
+        setVideogames(updatedVideogames)
     }
 
     function handleUpdateReview(updatedReview) {
@@ -169,8 +168,22 @@ function Videogame ({videogames, setVideogames}) {
             )
           })
         .then((r) => r.json())
-        .then((r) => console.log(r))
+        .then((r) => updateReview(r))
     };
+
+    function updateReview (updatedReview) {
+        const updatedReviews = game.reviews.map((review) => {
+            if (updatedReview.id === review.id) {
+                return updatedReview
+            } else {
+                return review
+            }
+        })
+        setGame((game) => ({
+            ...game,
+            reviews: updatedReviews
+        }))
+    }
 
 
     function handleEditReview(id, editingValue) {

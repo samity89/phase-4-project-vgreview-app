@@ -9,8 +9,7 @@ class ApplicationController < ActionController::API
     end
     
     def render_unprocessable_entity_response(invalid)
-      render json: { errors: invalid.record.errors.full_messages }, status: :unprocessable_entity
-      redirect_back_or_to root_url, flash.now[:alert] = invalid.record.errors.full_messages.to_sentence
+        flash.now[:alert] = invalid.record.errors.full_messages.to_sentence
     end
 
   end
