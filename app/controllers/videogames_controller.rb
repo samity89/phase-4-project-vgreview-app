@@ -1,5 +1,6 @@
 class VideogamesController < ApplicationController
     skip_before_action :authorize, only: [:index, :show]
+    
     def index
         videogames = Videogame.all
         render json: videogames, include: ['reviews', 'reviews.user'], status: 200

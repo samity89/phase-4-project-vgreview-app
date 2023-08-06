@@ -15,6 +15,7 @@ function VGForm ({
         image_url: "",
         platform: "",
     })
+    const [errors, setErrors] = useState([])
 
     const handleChange = e => {
         const name = e.target.name;
@@ -23,9 +24,9 @@ function VGForm ({
     }
     
     
-    function handleGameFormSubmit (event) {
+    async function handleGameFormSubmit (event) {
         event.preventDefault()
-        fetch(`videogames/#create`, {
+        const response = await fetch(`videogames/#create`, {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(
@@ -38,14 +39,14 @@ function VGForm ({
                     "platform": videogameForm.platform
                 })
             })
-            .then((response) => {
+            const data = await response.json()
                 if (response.ok) { 
-                 response.json().then((newGame) => handleAddGame(newGame))
+                 handleAddGame(data)
                  navigate("/videogames")
-                }
-                return Promise.reject(response); 
-            })
-    }
+                } else {
+                setErrors(data.errors)
+        }}
+    
       
         function handleAddGame(newGame) {
             setVideogames([...videogames, newGame])
@@ -75,6 +76,13 @@ function VGForm ({
                 Platform<input 
                     name="platform"
                     onChange={handleChange}/><br/>
+                {errors.length > 0 && (
+                    <ul style={{ color: "red" }}>
+                        {errors.map((error) => (
+                            <li key={error}>{error}</li>
+                        ))}
+                    </ul>
+                 )}
                 <button type="submit">Submit</button>
                 <hr></hr>
             </form>
