@@ -12,7 +12,7 @@ class ReviewsController < ApplicationController
     end
 
     def create
-        review = Review.create(review_params)
+        review = Review.create!(review_params)
         render json: review, status: 201
     end
 

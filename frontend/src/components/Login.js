@@ -5,6 +5,7 @@ import { UserContext } from "./UserContext";
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState([]);
   const { setUser } = useContext(UserContext)
   const navigate = useNavigate()
 
@@ -20,6 +21,8 @@ function Login() {
       if (response.ok) {
         response.json().then((user) => setUser(user))
         navigate("/")
+      } else {
+        response.json().then((response) => setErrors(response.error))
       }
     });
   }
@@ -43,7 +46,9 @@ function Login() {
           autoComplete="current-password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-        /><br></br>
+          /><br></br>
+          {errors}
+          <br></br>
         <button type="submit">Login</button>
       </form>
     </div>

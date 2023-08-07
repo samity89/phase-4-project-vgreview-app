@@ -7,6 +7,7 @@ function SignUp() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
+  const [errors, setErrors] = useState([]);
   const navigate = useNavigate()
 
   function handleSubmit(e) {
@@ -24,9 +25,11 @@ function SignUp() {
     }).then((r) => {
       if (r.ok) {
         r.json().then((user) => setUser(user));
+        navigate("/")
+      } else {
+        r.json().then((r) => setErrors(r.errors))
       }
     });
-    navigate("/")
   }
 
   return (
@@ -57,6 +60,13 @@ function SignUp() {
           onChange={(e) => setPasswordConfirmation(e.target.value)}
           autoComplete="current-password"
         /><br></br>
+        {errors.length > 0 && (
+          <ul style={{ color: "red" }}>
+            {errors.map((error) => (
+              <li key={error}>{error}</li>
+              ))}
+          </ul>
+        )}
         <button type="submit">Sign Up</button>
       </form>
     </div>

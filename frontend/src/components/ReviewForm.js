@@ -5,8 +5,6 @@ function ReviewForm ({
     videogames,
     setVideogames, 
     navigate,
-    setReviews,
-    reviews 
 }) {
     const {user} = useContext(UserContext)
     const renderGameTitles = videogames.map((videogame) => (
@@ -19,10 +17,11 @@ function ReviewForm ({
         rating: "",
         body: "",
     });
+    const [errors, setErrors] = useState([])
 
-    function handleFormSubmit (event) {
+    async function handleFormSubmit (event) {
         event.preventDefault()
-        fetch(`reviews/#create`, {
+        const response = await fetch(`reviews/#create`, {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({
@@ -33,8 +32,12 @@ function ReviewForm ({
                 "body": formData.body,
             })
         })
-        .then((response) => response.json())
-        .then((newReview) => handleAddReview(newReview))
+        const data = await response.json()
+        if (response.ok) { 
+            handleAddReview(data)
+        } else {
+            setErrors(data.errors)
+        }
     }
     
     const handleAddReview = (newReview) => {
@@ -129,6 +132,13 @@ function ReviewForm ({
                     type="text"
                     name="body"
                     onChange={handleChange}/><br></br>
+                {errors.length > 0 && (
+                    <ul style={{ color: "red" }}>
+                        {errors.map((error) => (
+                            <li key={error}>{error}</li>
+                        ))}
+                    </ul>
+                 )}
                 <button type="submit">Submit</button>
             </form>
         </div>

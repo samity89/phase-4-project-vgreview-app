@@ -40,12 +40,13 @@ function VGForm ({
                 })
             })
             const data = await response.json()
-                if (response.ok) { 
-                 handleAddGame(data)
-                 navigate("/videogames")
-                } else {
+            if (response.ok) { 
+                handleAddGame(data)
+                navigate("/videogames")
+            } else {
                 setErrors(data.errors)
-        }}
+            }
+        }
     
       
         function handleAddGame(newGame) {

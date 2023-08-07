@@ -12,7 +12,7 @@ class VideogamesController < ApplicationController
     end
     
     def create
-        videogame = Videogame.create(videogame_params)
+        videogame = Videogame.create!(videogame_params)
         render json: videogame, include: ['reviews', 'reviews.user' ], status: 201
     end
 
