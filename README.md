@@ -1,24 +1,24 @@
-# README
+# VGReviews
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This project was bootstrapped with [Create React App] utilizing a backend Rails with a postgresql database hosted on Render.  VGReviews is a single page applications in which users can submit reviews for videogames currently available in the database.  Administrative users have full CRUD access to both the Review and Videogame models.
 
-Things you may want to cover:
+## Using VGReviews
 
-* Ruby version
+First, fork and clone this repository.  Then navigate to the vgreview-app directory and run the following scripts.
 
-* System dependencies
+### `rails db:migrate db:seed`
 
-* Configuration
+Initializes the database and seeds it with data for the application to utilize
 
-* Database creation
+### `rails s`
 
-* Database initialization
+Launches the api in which all neccessary data for frontend is stored.
 
-* How to run the test suite
+### `npm start --prefix frontend`
 
-* Services (job queues, cache servers, search engines, etc.)
+Runs the app in the development mode.
+Open [http://localhost:4000](http://localhost:4000) to view it in your browser.
 
-* Deployment instructions
+Now utilize the application in your browser.  The following is a video demonstrating this:
 
-* ...
+https://youtu.be/pdVWP708xyA
